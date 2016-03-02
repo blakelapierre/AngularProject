@@ -3,6 +3,17 @@ import path from 'path';
 
 import _ from 'lodash';
 
+const template = component => `${component.name}\n`;
+const style = component => `${component.name} { }\n`;
+const directive = component => `module.exports = () => ({
+  restrict: 'E',
+  template: require('./template.html'),
+  controller: ['$scope', $scope => {
+
+  }]
+});`;
+
+
 export function toAngularProject(project) {
   const projectRoot = `${project.name}`,
         modulesRoot = path.join(projectRoot, 'modules');
@@ -39,20 +50,40 @@ export function toAngularProject(project) {
 
       function componentProcessor(root) {
         return component => {
+          component.components.forEach(componentProcessor(prepareDirectory(component)));
+        };
+
+        function prepareDirectory(component) {
           const componentRoot = path.join(root, component.name);
 
           createDirectory(componentRoot);
+          createFiles(componentRoot, component);
 
-          component.components.forEach(componentProcessor(componentRoot));
-        };
+          return componentRoot;
+        }
+
+        function createFiles(directory, component) {
+          const root = path.join(directory, component.name);
+
+          createFile(path.join(directory, 'template.html'), template(component));
+          createFile(path.join(directory, 'style.less'), style(component));
+          createFile(path.join(directory, 'index.js'), directive(component));
+        }
       }
     }
   }
 }
 
-function createDirectory(path) {
+function createDirectory(directory) {
+  if (!fs.existsSync(directory)) {
+    console.log(`Creating D '${directory}'`);
+    fs.mkdirSync(directory);
+  }
+}
+
+function createFile(path, content) {
   if (!fs.existsSync(path)) {
-    console.log(`Creating '${path}'`);
-    fs.mkdirSync(path);
+    console.log(`Creating F '${path}'`);
+    fs.writeFileSync(path, content);
   }
 }
