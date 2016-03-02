@@ -28,7 +28,7 @@ export function toAngularProject(project) {
       else if (element.components) {
         createDirectory(directivesRoot);
 
-        element.components.forEach(processComponent(directivesRoot));
+        element.components.forEach(componentProcessor(directivesRoot));
       }
       else if (element.routes) {
 
@@ -37,13 +37,13 @@ export function toAngularProject(project) {
 
       }
 
-      function processComponent(root) {
+      function componentProcessor(root) {
         return component => {
           const componentRoot = path.join(root, component.name);
 
           createDirectory(componentRoot);
 
-          component.components.forEach(processComponent(componentRoot));
+          component.components.forEach(componentProcessor(componentRoot));
         };
       }
     }
