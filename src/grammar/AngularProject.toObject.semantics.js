@@ -20,7 +20,7 @@ export default {
 
   Components: (glyph, components) => join({components}),
 
-  Component: (name, subComponents) => join({name, subComponents}),
+  Component: (name, components) => join({name, components: first(components) || []}),
 
   Routes: (glyph, routes) => join({routes}),
 
