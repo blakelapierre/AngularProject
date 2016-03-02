@@ -1,0 +1,42 @@
+AngularProject {
+  Application = name Contained<Module*>
+
+  Module = name Contained<ModuleElement*>
+
+  ModuleElement = Requirements
+                | Components
+                | Factories
+                | Routes
+
+  Requirements = RequirementsGlyph Contained<Requirement*>
+  RequirementsGlyph = "requires"
+                    | "<="
+                    | "<"
+  Requirement = name
+
+  Components = ComponentsGlyph Contained<Component*>
+  ComponentsGlyph = "components"
+                  | "directives"
+                  | "#"
+  Component = name Contained<Component*>?
+
+  Factories = FactoriesGlyph Contained<Factory*>
+  FactoriesGlyph = "factories"
+                 | "^"
+  Factory = name
+
+  Routes = RoutesGlyph Contained<Route*>
+  RoutesGlyph = "routes"
+              | "=>"
+              | ">"
+  Route = Quoted<path> ":" name
+  path = routeCharacter+
+  routeCharacter = alnum | "/" | "_" | "-"
+
+  Contained<element> = CContained<"{", element, "}">
+  Quoted<element> = CContained<"'", element, "'">
+  CContained<open, element, close> = open element close
+
+  name = nameCharacter+
+  nameCharacter = alnum | "_" | "-"
+}

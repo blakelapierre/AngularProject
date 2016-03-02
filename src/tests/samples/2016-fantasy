@@ -1,0 +1,59 @@
+2016-fantasy {
+  presidential {
+    < {
+      ng-route
+      ng-animate
+      ng-touch
+      data-store
+      devbox
+      state
+      state-graph
+      ui-components
+    }
+
+    # {
+      presidential {
+        candidates
+        league
+        welcome
+        find-league
+        new-league {
+          construct
+          draft
+          selection {
+            pasture
+            set-draft
+            stable
+          }
+          sidebar {
+            players {
+              invite
+            }
+          }
+        }
+      }
+    }
+
+    > {
+      '/' : welcome
+      '/candidates': candidates
+    }
+  }
+
+  dataStore {
+    ^ {
+      dataStore
+    }
+  }
+
+  ui-components {
+    directives {
+      delayed-src
+      scroll
+      scrollControl
+      scrollSync
+      scrollSwap
+      sensitiveTouch
+    }
+  }
+}
