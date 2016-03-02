@@ -40,9 +40,9 @@
     }
   }
 
-  dataStore {
+  data-store {
     ^ {
-      dataStore
+      data-store
     }
   }
 
