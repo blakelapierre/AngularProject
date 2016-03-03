@@ -33,7 +33,11 @@ export default {
 
   Factory: (name, factories) => join({name, factories: first(factories) || []}),
 
-  Configs: (glyph, configs) => join({configs}),
+  Configs: (glyph, configs) => {
+    const obj = join({configs});
+    if (obj.configs.length === 0) obj.configs.push('config');
+    return obj;
+  },
 
   name (character) {
     return this.interval.contents;
