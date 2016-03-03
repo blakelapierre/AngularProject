@@ -146,6 +146,9 @@ export function toAngularProject(project) {
     }
 
     function processConfigs(configs) {
+      if (configs.length === 0) {
+        configs.push('config');
+      }
       configs.forEach(config => createFileIfNotExists(path.join(moduleRoot, `${config}.js`), createConfig(config)));
     }
 

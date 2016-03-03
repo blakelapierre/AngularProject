@@ -46,7 +46,7 @@
       '/candidates': candidates
     }
 
-    config {config}
+    config
   }
 
   state {

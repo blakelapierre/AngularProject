@@ -35,7 +35,7 @@ AngularProject {
   path = routeCharacter+
   routeCharacter = alnum | "/" | "_" | "-"
 
-  Configs = "config" Contained<Config*>
+  Configs = "config" Contained<Config*>?
   Config = name
 
   Contained<element> = CContained<"{", element, "}">
