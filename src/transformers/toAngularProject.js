@@ -3,7 +3,7 @@ import path from 'path';
 
 import _ from 'lodash';
 
-const template = component => `${component.name}\n`;
+const template = component => `<h1 class="unmodified-component">${component.name}</h1>\n`;
 const style = component => `${component.name} { }\n`;
 const directive = component => `module.exports = () => ({
   restrict: 'E',
@@ -12,6 +12,35 @@ const directive = component => `module.exports = () => ({
 
   }]
 });`;
+
+const moduleIndex = (function(module) {
+  const moduleName = module.name;
+
+  const printComponents = (indent, components) =>
+
+`${(components || [])
+      .map(
+        ({name, path, components}) =>
+            `${indent}.directive('${name}',${Array(Math.max(1, 33 - name.length - indent.length)).join(' ')}require('${path}'))${onNewLineIfExists(printComponents(indent + '  ', components))}`
+      ).join('\n')
+}`;
+
+  const onNewLineIfExists = value => value ? `\n${value}` : '';
+
+  return ({name, requirements, components, factories, routes}) =>
+
+`require('angular');
+
+${(requirements || []).map(({jsPackageName, moduleName}) => jsPackageName ? `require('${jsPackageName}');`
+                                                                          : `import ${moduleName} from '../${moduleName}';`).join('\n')}
+
+export default {
+  '${name}': angular.module('${name}', [${(requirements || []).map(({moduleName}) => `'${moduleName}'`).join(', ')}])
+${printComponents('    ', components)}
+}
+`;
+
+})(module);
 
 
 export function toAngularProject(project) {
@@ -30,27 +59,18 @@ export function toAngularProject(project) {
 
     createDirectory(moduleRoot);
 
-    module.elements.forEach(processElement);
+    if (module.components) processComponents(module.components);
+    createModuleIndex(module);
 
-    function processElement(element) {
-      if (element.requirements) {
+    function processComponents(components) {
+      createDirectory(directivesRoot);
 
-      }
-      else if (element.components) {
-        createDirectory(directivesRoot);
+      components.forEach(componentProcessor(directivesRoot));
 
-        element.components.forEach(componentProcessor(directivesRoot));
-      }
-      else if (element.routes) {
-
-      }
-      else if (element.factories) {
-
-      }
-
-      function componentProcessor(root) {
+      function componentProcessor(root, parent = {path: `./directives`}) {
         return component => {
-          component.components.forEach(componentProcessor(prepareDirectory(component)));
+          component.path = `${parent.path}/${component.name}`; // mutation
+          component.components.forEach(componentProcessor(prepareDirectory(component), component));
         };
 
         function prepareDirectory(component) {
@@ -70,6 +90,10 @@ export function toAngularProject(project) {
           createFile(path.join(directory, 'index.js'), directive(component));
         }
       }
+    }
+
+    function createModuleIndex(module) {
+      createFile(path.join(moduleRoot, 'index.js'), moduleIndex(module));
     }
   }
 }

@@ -12,7 +12,8 @@ AngularProject {
   RequirementsGlyph = "requires"
                     | "<="
                     | "<"
-  Requirement = name
+  Requirement = name JSPackage?
+  JSPackage = ":" jsPackageName
 
   Components = ComponentsGlyph Contained<Component*>
   ComponentsGlyph = "components"
@@ -39,4 +40,6 @@ AngularProject {
 
   name = nameCharacter+
   nameCharacter = alnum | "_" | "-"
+
+  jsPackageName = name
 }

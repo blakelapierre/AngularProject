@@ -14,9 +14,12 @@ export default {
     return join({name, modules});
   },
 
-  Module: (name, elements) => join({name, elements}),
+  Module: (name, elements) => join(Object.assign({name}, reduce(elements.toObject(), (obj, element) => Object.assign(obj, element)))),
 
   Requirements: (glyph, requirements) => join({requirements}),
+
+  Requirement: (moduleName, jsPackageName) => join({moduleName, jsPackageName: first(jsPackageName)}),
+  JSPackage: (colon, jsPackageName) => jsPackageName.toObject(),
 
   Components: (glyph, components) => join({components}),
 
@@ -32,5 +35,15 @@ export default {
 
   name (character) {
     return this.interval.contents;
+  },
+
+  path (character) {
+    return this.interval.contents;
   }
 };
+
+function reduce(xs, fn, initial = {}) {
+  let next = initial;
+  xs.forEach(x => next = fn(next, x));
+  return next;
+}

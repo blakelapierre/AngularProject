@@ -7,9 +7,10 @@
 
   presidential {
     < {
-      ng-route
-      ng-animate
-      ng-touch
+      ngRoute   :angular-route
+      ngAnimate :angular-animate
+      ngTouch   :angular-touch
+
       data-store
       devbox
       state
