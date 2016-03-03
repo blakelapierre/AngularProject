@@ -1,4 +1,10 @@
 2016-fantasy {
+  data-store {
+    ^ {
+      data-store
+    }
+  }
+
   presidential {
     < {
       ng-route
@@ -40,10 +46,12 @@
     }
   }
 
-  data-store {
-    ^ {
-      data-store
-    }
+  state {
+    ^ {state}
+  }
+
+  state-graph {
+    # {stage}
   }
 
   ui-components {
