@@ -138,6 +138,7 @@ export function toAngularProject(project) {
   project.modules.forEach(processModule);
 
   createFile(path.join(projectRoot, 'app.js'), createApp(project));
+  createFile(path.join(projectRoot, 'app.less'), `body { }\n`);
 
   function getFirstModuleWithComponents(project) {
     for (let i = 0; i < project.modules.length; i++) {
