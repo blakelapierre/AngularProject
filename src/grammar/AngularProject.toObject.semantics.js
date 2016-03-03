@@ -31,7 +31,9 @@ export default {
 
   Factories: (glyph, factories) => join({factories}),
 
-  Factory: (name) => join({name}),
+  Factory: (name, factories) => join({name, factories: first(factories) || []}),
+
+  Configs: (glyph, configs) => join({configs}),
 
   name (character) {
     return this.interval.contents;

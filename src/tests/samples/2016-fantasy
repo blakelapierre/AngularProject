@@ -45,10 +45,12 @@
       '/' : welcome
       '/candidates': candidates
     }
+
+    config {config}
   }
 
   state {
-    ^ {state}
+    ^ {state {nested}}
   }
 
   state-graph {
