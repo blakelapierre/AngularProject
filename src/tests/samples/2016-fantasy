@@ -13,9 +13,9 @@
 
     # {
       presidential {
+        welcome
         candidates
         league
-        welcome
         find-league
         new-league {
           construct
