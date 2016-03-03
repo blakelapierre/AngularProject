@@ -37,7 +37,7 @@ ${(requirements || []).map(({jsPackageName, moduleName}) => jsPackageName ? `req
 export default {
   '${name}': angular.module('${name}', [${(requirements || []).map(({moduleName}) => `'${moduleName}'`).join(', ')}])
 ${printComponents('    ', components)}
-}
+};
 `;
 
 })(module);
