@@ -29,8 +29,8 @@
           draft
           selection {
             pasture
-            set-draft
             stable
+            set-draft
           }
           sidebar {
             players {
