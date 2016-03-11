@@ -46,6 +46,9 @@
     > {
       '/' : welcome
       '/candidates': candidates
+      '/league/new': new-league
+      '/league/find': find-league
+      '/league/:leagueId': league
     }
 
     config
