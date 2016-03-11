@@ -33,7 +33,7 @@ AngularProject {
               | ">"
   Route = Quoted<path> ":" name
   path = routeCharacter+
-  routeCharacter = alnum | "/" | "_" | "-"
+  routeCharacter = alnum | "/" | "_" | "-" | ":"
 
   Configs = "config" Contained<Config*>?
   Config = name
