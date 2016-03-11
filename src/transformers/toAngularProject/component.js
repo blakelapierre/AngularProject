@@ -16,6 +16,37 @@ export function directive(component) {
 });`;
 }
 
+export function factory(project) {
+  return `module.exports = () => ({
+
+});`;
+}
+
+export const index =
+  component =>
+`<!DOCTYPE html>
+<html ng-app="presidential">
+  <head>
+    <meta charset="utf-8">
+
+    <title>${component.name}</title>
+
+    <!-- Do we want this? -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="app.css">
+  </head>
+  <body>
+    <ng-view></ng-view>
+    <script src="vendor.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
+`;
+
 export const moduleIndex = (function() {
   const onNewLineIfExists = value => value ? `\n${value}` : '';
   const printComponents = (indent, components) =>
@@ -38,13 +69,13 @@ export const moduleIndex = (function() {
 
   const printConfigs = (indent, configs) =>
 `${
-  (configs || []).map(config => `${indent}.config(require('./${config}'))`).join('\n')
+  (configs || []).map(config => `${indent}.config(require('./${config}').default)`).join('\n')
 }`;
 
   return ({name, requirements, components, factories, routes, configs}) => autoGenerateWarning(
 `require('angular');
 
-${(requirements || []).map(({jsPackageName, moduleName}) => `require('${jsPackageName || moduleName}');`).join('\n')}
+${(requirements || []).map(({jsPackageName, moduleName}) => `require('${jsPackageName || ('../' + moduleName)}');`).join('\n')}
 
 export default {
   '${name}': angular.module('${name}', [${(requirements || []).map(({moduleName}) => `'${moduleName}'`).join(', ')}])

@@ -3,7 +3,7 @@ import path from 'path';
 
 import _ from 'lodash';
 
-import {createRoutes, createConfigs, createApp, directive, moduleIndex, style, template} from './component';
+import {createRoutes, createConfigs, createApp, directive, factory, index, moduleIndex, style, template} from './component';
 
 export function toAngularProject(project) {
   const projectRoot = `${process.env.project_root || '.'}/${project.name}`,
@@ -20,6 +20,7 @@ export function toAngularProject(project) {
 
   createFile(path.join(sourceRoot, 'app.js'), createApp(project));
   createFile(path.join(sourceRoot, 'app.less'), `body { }\n`);
+  createFile(path.join(sourceRoot, 'index.html'), index(project));
 
   function getFirstModuleWithComponents(project) {
     for (let i = 0; i < project.modules.length; i++) {
@@ -101,10 +102,10 @@ export function toAngularProject(project) {
           return factoryRoot;
         }
 
-        function createFiles(directory, factory) {
-          const root = path.join(directory, factory.name);
+        function createFiles(directory, f) {
+          const root = path.join(directory, f.name);
 
-          createFileIfNotExists(path.join(directory, 'index.js'), directive(factory));
+          createFileIfNotExists(path.join(directory, 'index.js'), factory(f));
         }
       }
     }

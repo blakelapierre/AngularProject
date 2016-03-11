@@ -5,6 +5,8 @@
     }
   }
 
+  devbox {}
+
   presidential {
     < {
       ngRoute   :angular-route
