@@ -10,40 +10,45 @@ AngularProject {
                 | Configs
 
   Requirements = RequirementsGlyph Contained<Requirement*>
+  Components = ComponentsGlyph Contained<Component*>
+  Factories = FactoriesGlyph Contained<Factory*>
+  Routes = RoutesGlyph Contained<Route*>
+
+  Configs = "config" Contained<Config*>?
+
   RequirementsGlyph = "requires"
                     | "<="
                     | "<"
-  Requirement = name JSPackage?
-  JSPackage = ":" jsPackageName
 
-  Components = ComponentsGlyph Contained<Component*>
   ComponentsGlyph = "components"
                   | "directives"
                   | "#"
-  Component = name Contained<Component*>?
 
-  Factories = FactoriesGlyph Contained<Factory*>
   FactoriesGlyph = "factories"
                  | "^"
-  Factory = name Contained<Factory*>?
 
-  Routes = RoutesGlyph Contained<Route*>
   RoutesGlyph = "routes"
               | "=>"
               | ">"
-  Route = Quoted<path> ":" name
-  path = routeCharacter+
-  routeCharacter = alnum | "/" | "_" | "-" | ":"
 
-  Configs = "config" Contained<Config*>?
+  Requirement = name JSPackage?
+  Component = name Contained<Component*>?
+  Factory = name Contained<Factory*>?
+  Route = Quoted<path> ":" name
+
+  JSPackage = ":" jsPackageName
+
   Config = name
 
-  Contained<element> = CContained<"{", element, "}">
-  Quoted<element> = CContained<"'", element, "'">
-  CContained<open, element, close> = open element close
+  path = routeCharacter+
+  routeCharacter = alnum | "/" | "_" | "-" | ":"
 
   name = nameCharacter+
   nameCharacter = alnum | "_" | "-"
 
   jsPackageName = name
+
+  Contained<element> = CContained<"{", element, "}">
+  Quoted<element> = CContained<"'", element, "'">
+  CContained<open, element, close> = open element close
 }
