@@ -12,15 +12,15 @@ export function toAngularProject(project) {
 
   project.rootModule = getFirstModuleWithComponents(project);
 
-  createDirectory(projectRoot);
-  createDirectory(sourceRoot);
-  createDirectory(modulesRoot);
+  [projectRoot, sourceRoot, modulesRoot].forEach(createDirectory);
 
   project.modules.forEach(processModule);
 
-  createFile(path.join(sourceRoot, 'app.js'), createApp(project));
-  createFile(path.join(sourceRoot, 'app.less'), `body { .children { display: flex; * { flex: 1; } } }\n`);
-  createFile(path.join(sourceRoot, 'index.html'), index(project));
+  _.each({
+    'app.js': createApp(project),
+    'app.less': `body { .children { display: flex; * { flex: 1; } } }\n`,
+    'index.html': index(project)
+  }, (content, name) => createFile(path.join(sourceRoot, name), content));
 
   function getFirstModuleWithComponents(project) {
     // note: these are not necessarily in the order of the source file...
