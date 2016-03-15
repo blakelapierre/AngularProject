@@ -23,6 +23,7 @@ export function toAngularProject(project) {
   createFile(path.join(sourceRoot, 'index.html'), index(project));
 
   function getFirstModuleWithComponents(project) {
+    // note: these are not necessarily in the order of the source file...
     for (let i = 0; i < project.modules.length; i++) {
       const module = project.modules[i];
 
