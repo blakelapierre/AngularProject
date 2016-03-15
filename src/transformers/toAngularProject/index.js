@@ -19,7 +19,7 @@ export function toAngularProject(project) {
   project.modules.forEach(processModule);
 
   createFile(path.join(sourceRoot, 'app.js'), createApp(project));
-  createFile(path.join(sourceRoot, 'app.less'), `body { }\n`);
+  createFile(path.join(sourceRoot, 'app.less'), `body { .children { display: flex; * { flex: 1; } } }\n`);
   createFile(path.join(sourceRoot, 'index.html'), index(project));
 
   function getFirstModuleWithComponents(project) {
@@ -90,7 +90,7 @@ export function toAngularProject(project) {
       function factoryProcessor(root, parent = {path: `./factories`}) {
         return factory => {
           factory.path = `${parent.path}/${factory.name}`; // mutation
-          factory.factories.forEach(factoryProcessor(prepareDirectory(factory), factory));
+          return factory.factories.map(factoryProcessor(prepareDirectory(factory), factory));
         };
 
         function prepareDirectory(factory) {

@@ -1,5 +1,5 @@
 export function template(component) {
-  return `<h1 class="unmodified-component">${component.name}</h1>\n`;
+  return `<h1 class="unmodified-component">${component.name}</h1><div class="children">${component.components.map(({name}) => `<${name}></${name}>`).join('')}</div>`;
 }
 
 export function style(component) {

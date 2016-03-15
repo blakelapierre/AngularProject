@@ -1,13 +1,7 @@
 2016-fantasy {
-  data-store {
-    ^ {
-      data-store
-    }
-  }
-
-  devbox {}
-
   presidential {
+    config
+
     < {
       ngRoute   :angular-route
       ngAnimate :angular-animate
@@ -50,8 +44,22 @@
       '/league/find': find-league
       '/league/:leagueId': league
     }
+  }
 
-    config
+  data-store {
+    ^ {
+      data-store
+    }
+  }
+
+  devbox {
+    # {
+      companion-panel
+    }
+
+    ^ {
+      keylog
+    }
   }
 
   state {
