@@ -5,8 +5,8 @@ import _ from 'lodash';
 
 import {createRoutes, createConfigs, createApp, directive, factory, index, moduleIndex, style, template} from './component';
 
-export function toAngularProject(project) {
-  const projectRoot = `${process.env.project_root || '.'}/${project.name}`,
+export function toAngularProject(project, directory = '.') {
+  const projectRoot = `${process.env.project_root || directory}/${project.name}`,
         sourceRoot = path.join(projectRoot, 'src'),
         modulesRoot = path.join(sourceRoot, 'modules');
 
@@ -21,6 +21,8 @@ export function toAngularProject(project) {
     'app.less': `body { .unmodified-component { text-align: center; } .children { display: flex; justify-content: center; align-items: center; * { flex: 1; } } }\n`,
     'index.html': index(project)
   }, (content, name) => createFile(path.join(sourceRoot, name), content));
+
+  return project;
 
   function getFirstModuleWithComponents(project) {
     // note: these are not necessarily in the order of the source file...

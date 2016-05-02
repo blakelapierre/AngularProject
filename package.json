@@ -2,7 +2,8 @@
   "name": "angularproject",
   "version": "0.0.2",
   "description": "Angular.js 1 project generator",
-  "main": "src/index.js",
+  "main": ".dist/index.js",
+  "bin": {"AngularProject": ".dist/cli.js"},
   "directories": {
     "doc": "docs"
   },

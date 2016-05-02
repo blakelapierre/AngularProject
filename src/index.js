@@ -1,11 +1,13 @@
-require('traceur-runtime');
-
-import {loadGrammarWithSemantics, runFromFile} from './ohmLoader';
+import {loadGrammarWithSemantics, run, runFromFile} from './ohmLoader';
 
 import {toAngularProject} from './transformers/toAngularProject';
 
 const {grammar, semantics} = loadGrammarWithSemantics('AngularProject', ['toObject']);
 
-const object = runFromFile(`${process.argv[2]}`, grammar, semantics, 'toObject');
+export function runOn(model, directory = '.') {
+  return toAngularProject(run(model, grammar, semantics, 'toObject'));
+}
 
-toAngularProject(object);
+export function runOnFile(file, directory = '.') {
+  return toAngularProject(runFromFile(file, grammar, semantics, 'toObject'));
+}
