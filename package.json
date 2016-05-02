@@ -1,0 +1,29 @@
+{
+  "name": "angularproject",
+  "version": "0.0.1",
+  "description": "Angular.js 1 project generator",
+  "main": "src/index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {
+    "angular": "^1.5.0",
+    "angular-route": "^1.5.0",
+    "angular-touch": "^1.5.0",
+    "angular-animate": "^1.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blakelapierre/AngularProject.git"
+  },
+  "author": "Blake La Pierre",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/blakelapierre/AngularProject/issues"
+  },
+  "homepage": "https://github.com/blakelapierre/AngularProject#readme"
+}
