@@ -18,7 +18,7 @@ export function toAngularProject(project) {
 
   _.each({
     'app.js': createApp(project),
-    'app.less': `body { .children { display: flex; * { flex: 1; } } }\n`,
+    'app.less': `body { .unmodified-component { text-align: center; } .children { display: flex; justify-content: center; align-items: center; * { flex: 1; } } }\n`,
     'index.html': index(project)
   }, (content, name) => createFile(path.join(sourceRoot, name), content));
 
@@ -119,6 +119,10 @@ export function toAngularProject(project) {
       createFile(path.join(moduleRoot, 'index.js'), moduleIndex(module));
     }
   }
+}
+
+function addDependenciesToPackageDotJSON(dependencies) {
+
 }
 
 function createDirectory(directory) {

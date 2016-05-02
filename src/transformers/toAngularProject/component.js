@@ -3,7 +3,7 @@ export function template(component) {
 }
 
 export function style(component) {
-  return `${component.name} { }\n`;
+  return `${component.name} { flex: 1; }\n`;
 }
 
 export function directive(component) {
@@ -143,11 +143,11 @@ export const createConfigs = config =>
 
 }];`;
 
-export const createApp = project => autoGenerateWarning(`
-import ${project.rootModule} from './modules/${project.rootModule}';
+export const createApp = ({rootModule}) => autoGenerateWarning(`
+import ${rootModule} from './modules/${rootModule}';
 
 export default {
-  '${project.rootModule}': ${project.rootModule}['${project.rootModule}']
+  '${rootModule}': ${rootModule}['${rootModule}']
 };
 `);
 
