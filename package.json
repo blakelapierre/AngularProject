@@ -1,5 +1,5 @@
 {
-  "name": "angularproject",
+  "name": "angular_project",
   "version": "0.1.0",
   "description": "Angular.js 1 project generator",
   "main": ".dist/api.js",
