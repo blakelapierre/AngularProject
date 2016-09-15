@@ -1,14 +1,23 @@
-import {loadGrammarWithSemantics, runFromFile} from './ohmLoader';
+#!/usr/bin/env node
 
-import {toAngularProject} from './transformers/toAngularProject';
+import fs from 'fs';
 
-const {grammar, semantics} = loadGrammarWithSemantics('AngularProject', ['toObject']);
+import {api} from './api';
 
-const file = process.argv[2];
+import GrammarError from './GrammarError';
 
-if (file) {
-  const object = runFromFile(file, grammar, semantics, 'toObject');
+let i = 2;
+if (process.argv[0].endsWith('AngularProject')) i = 1;
 
-  toAngularProject(object);
+const fileName = process.argv[i],
+      directory = process.argv[i+1];
+
+processProjectFile(fileName);
+
+function processProjectFile(fileName, directory) {
+  api(fs.readFileSync(fileName).toString(), directory)
+    .catch(e => {
+      if (e instanceof GrammarError) console.error(e.match.message);
+      else console.error(e);
+    });
 }
-else console.log('No file!');

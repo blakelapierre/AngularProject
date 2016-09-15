@@ -5,10 +5,12 @@ import _ from 'lodash';
 
 import {createRoutes, createConfigs, createApp, directive, factory, index, moduleIndex, style, template} from './component';
 
-export function toAngularProject(project, directory = '.') {
+export default function toAngularProject(project, directory = '.') {
   const projectRoot = `${process.env.project_root || directory}/${project.name}`,
         sourceRoot = path.join(projectRoot, 'src'),
         modulesRoot = path.join(sourceRoot, 'modules');
+
+  console.log({env: process.env, directory, projectRoot});
 
   project.rootModule = getFirstModuleWithComponents(project);
 

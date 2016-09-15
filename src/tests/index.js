@@ -1,24 +1,13 @@
+import fs from 'fs';
 import util from 'util';
 
-import _ from 'lodash';
+import {api} from '../api';
 
-import {runOnFile} from './../';
 
-const object = runOnFile('./tests/samples/2016-fantasy');
-
-// import {loadGrammarWithSemantics, runFromFile} from '../ohmLoader';
-
-// import {toAngularProject} from '../transformers/toAngularProject';
-
-// const {grammar, semantics} = loadGrammarWithSemantics('AngularProject', ['toObject']);
-
-// const object = runFromFile('./tests/samples/2016-fantasy', grammar, semantics, 'toObject');
-
-log(util.inspect(object, false, null));
-
-// log(toPostgreSQL(orderTables(model)).join('\n'));
-
-// toAngularProject(object);
+api(fs.readFileSync('./tests/samples/2016-fantasy').toString())
+  .then(log)
+  .then(() => console.log('w'))
+  .catch(e => console.error(e));
 
 function log(...args) {
   console.log.apply(console, args.map(transformArg));

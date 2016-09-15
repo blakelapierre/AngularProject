@@ -1,4 +1,5 @@
-AngularProject {
+export default
+`AngularProject {
   Application = name Contained<Module*>
 
   Module = name Contained<ModuleElement*>
@@ -51,4 +52,4 @@ AngularProject {
   Contained<element> = CContained<"{", element, "}">
   Quoted<element> = CContained<"'", element, "'">
   CContained<open, element, close> = open element close
-}
+}`;

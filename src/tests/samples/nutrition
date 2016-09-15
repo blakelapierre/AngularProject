@@ -1,0 +1,20 @@
+nutrition {
+  food {
+    # {
+      welcome
+      food-item {
+        details
+        nutrients
+      }
+      search {
+        results
+      }
+    }
+  }
+
+  nutrients {
+    # {
+      nutrient
+    }
+  }
+}
