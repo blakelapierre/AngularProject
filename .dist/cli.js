@@ -1,16 +1,28 @@
+#!/usr/bin/env node
 'use strict';
 
-var _ohmLoader = require('./ohmLoader');
+var _fs = require('fs');
 
-var _toAngularProject = require('./transformers/toAngularProject');
+var _fs2 = _interopRequireDefault(_fs);
 
-const { grammar, semantics } = (0, _ohmLoader.loadGrammarWithSemantics)('AngularProject', ['toObject']);
+var _api = require('./api');
 
-const file = process.argv[2];
+var _GrammarError = require('./GrammarError');
 
-if (file) {
-  const object = (0, _ohmLoader.runFromFile)(file, grammar, semantics, 'toObject');
+var _GrammarError2 = _interopRequireDefault(_GrammarError);
 
-  (0, _toAngularProject.toAngularProject)(object);
-} else console.log('No file!');
-//# sourceMappingURL=cli.js.map
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var i = 2;
+if (process.argv[0].endsWith('AngularProject')) i = 1;
+
+var fileName = process.argv[i],
+    directory = process.argv[i + 1];
+
+processProjectFile(fileName);
+
+function processProjectFile(fileName, directory) {
+  (0, _api.api)(_fs2.default.readFileSync(fileName).toString(), directory).catch(function (e) {
+    if (e instanceof _GrammarError2.default) console.error(e.match.message);else console.error(e);
+  });
+}

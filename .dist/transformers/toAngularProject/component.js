@@ -8,147 +8,102 @@ exports.style = style;
 exports.directive = directive;
 exports.factory = factory;
 function template(component) {
-  return `<h1 class="unmodified-component">${ component.name }</h1><div class="children">${ component.components.map(({ name }) => `<${ name }></${ name }>`).join('') }</div>`;
+  return '<h1 class="unmodified-component">' + component.name + '</h1><div class="children">' + component.components.map(function (_ref) {
+    var name = _ref.name;
+    return '<' + name + '></' + name + '>';
+  }).join('') + '</div>';
 }
 
 function style(component) {
-  return `${ component.name } { flex: 1; }\n`;
+  return component.name + ' { flex: 1; }\n';
 }
 
 function directive(component) {
-  return `module.exports = () => ({
-  restrict: 'E',
-  template: require('./template.html'),
-  controller: ['$scope', $scope => {
-
-  }]
-});`;
+  return 'module.exports = () => ({\n  restrict: \'E\',\n  template: require(\'./template.html\'),\n  controller: [\'$scope\', $scope => {\n\n  }]\n});';
 }
 
 function factory(project) {
-  return `module.exports = () => ({
-
-});`;
+  return 'module.exports = () => ({\n\n});';
 }
 
-const index = exports.index = component => `<!DOCTYPE html>
-<html ng-app="presidential">
-  <head>
-    <meta charset="utf-8">
+var index = exports.index = function index(component) {
+  return '<!DOCTYPE html>\n<html ng-app="presidential">\n  <head>\n    <meta charset="utf-8">\n\n    <title>' + component.name + '</title>\n\n    <!-- Do we want this? -->\n    <meta name="viewport" content="width=device-width, initial-scale=1">\n    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->\n\n    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">\n\n    <link rel="stylesheet" href="app.css">\n  </head>\n  <body>\n    <ng-view></ng-view>\n    <script src="vendor.js"></script>\n    <script src="app.js"></script>\n  </body>\n</html>\n';
+};
 
-    <title>${ component.name }</title>
+var moduleIndex = exports.moduleIndex = function () {
+  var onNewLineIfExists = function onNewLineIfExists(value) {
+    return value ? '\n' + value : '';
+  };
+  var printComponents = function printComponents(indent, components) {
+    return '' + (components || []).map(function (_ref2) {
+      var name = _ref2.name;
+      var path = _ref2.path;
+      var components = _ref2.components;
+      return indent + '.directive(\'' + camelCase(name) + '\',' + Array(Math.max(1, 33 - name.length - indent.length)).join(' ') + 'require(\'' + path + '\'))' + onNewLineIfExists(printComponents(indent + '  ', components));
+    }).join('\n');
+  };
 
-    <!-- Do we want this? -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+  var printFactories = function printFactories(indent, factories) {
+    return '' + (factories || []).map(function (_ref3) {
+      var name = _ref3.name;
+      var path = _ref3.path;
+      var factories = _ref3.factories;
+      return indent + '.factory(\'' + camelCase(name) + '\',' + Array(Math.max(1, 33 - name.length - indent.length)).join(' ') + 'require(\'' + path + '\'))' + onNewLineIfExists(printFactories(indent + '  ', factories));
+    }).join('\n');
+  };
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  var printConfigs = function printConfigs(indent, configs) {
+    return '' + (configs || []).map(function (config) {
+      return indent + '.config(require(\'./' + config + '\').default)';
+    }).join('\n');
+  };
 
-    <link rel="stylesheet" href="app.css">
-  </head>
-  <body>
-    <ng-view></ng-view>
-    <script src="vendor.js"></script>
-    <script src="app.js"></script>
-  </body>
-</html>
-`;
-
-const moduleIndex = exports.moduleIndex = function () {
-  const onNewLineIfExists = value => value ? `\n${ value }` : '';
-  const printComponents = (indent, components) => `${ (components || []).map(({ name, path, components }) => `${ indent }.directive('${ camelCase(name) }',${ Array(Math.max(1, 33 - name.length - indent.length)).join(' ') }require('${ path }'))${ onNewLineIfExists(printComponents(indent + '  ', components)) }`).join('\n') }`;
-
-  const printFactories = (indent, factories) => `${ (factories || []).map(({ name, path, factories }) => `${ indent }.factory('${ camelCase(name) }',${ Array(Math.max(1, 33 - name.length - indent.length)).join(' ') }require('${ path }'))${ onNewLineIfExists(printFactories(indent + '  ', factories)) }`).join('\n') }`;
-
-  const printConfigs = (indent, configs) => `${ (configs || []).map(config => `${ indent }.config(require('./${ config }').default)`).join('\n') }`;
-
-  return ({ name, requirements, components, factories, routes, configs }) => autoGenerateWarning(`require('angular');
-
-${ (requirements || []).map(({ jsPackageName, moduleName }) => `require('${ jsPackageName || '../' + moduleName }');`).join('\n') }
-
-export default {
-  '${ name }': angular.module('${ name }', [${ (requirements || []).map(({ moduleName }) => `'${ moduleName }'`).join(', ') }])
-${ printComponents('    ', components) }
-${ printFactories('    ', factories) }
-${ printConfigs('    ', configs) }
-};`);
+  return function (_ref4) {
+    var name = _ref4.name;
+    var requirements = _ref4.requirements;
+    var components = _ref4.components;
+    var factories = _ref4.factories;
+    var routes = _ref4.routes;
+    var configs = _ref4.configs;
+    return autoGenerateWarning('require(\'angular\');\n\n' + (requirements || []).map(function (_ref5) {
+      var jsPackageName = _ref5.jsPackageName;
+      var moduleName = _ref5.moduleName;
+      return 'require(\'' + (jsPackageName || '../' + moduleName) + '\');';
+    }).join('\n') + '\n\nexport default {\n  \'' + name + '\': angular.module(\'' + name + '\', [' + (requirements || []).map(function (_ref6) {
+      var moduleName = _ref6.moduleName;
+      return '\'' + moduleName + '\'';
+    }).join(', ') + '])\n' + printComponents('    ', components) + '\n' + printFactories('    ', factories) + '\n' + printConfigs('    ', configs) + '\n};');
+  };
 }();
 
-const createRoutes = exports.createRoutes = routes => autoGenerateWarning(
-// autogenerateWarning`
-// export default ...
-// `
-`export default ['$routeProvider', $routeProvider => {
-  const routerController = [
-    '$scope', '$routeParams',
-    ($scope, $routeParams) => Object.assign($scope, $routeParams)
-  ];
-
-  // Allows you to wire a route to a specific item in a database.
-  // Currently, this is equivalent to grabbing a value from a
-  // key-value store based on a user provided parameter in the URL
-  const dataController = [
-    '$scope', '$routeParams', 'dataStore',
-    ($scope, $routeParams, dataStore) => {
-      const something = reduce($routeParams, (params, value, name) => {
-        const [store, index] = name.match(/(\\b|[A-Z]+)[a-z]*/g);
-
-        console.log({name, value, store, index});
-
-        params[store] = dataStore[${ '`get${capitalize(store)}By${index}`' }](value);
-
-        return params;
-      });
-
-      console.log({$scope, dataStore, something});
-
-      Object.assign($scope, something);
-
-      function capitalize(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-      }
-    }
-  ];
-
-  $routeProvider
-${ routes.map(route => `      .when('${ route.path }', {
-      template: '<${ route.name }></${ route.name }>'${ route.path.indexOf(':') >= 0 ? ',\n      controller: dataController' : '' }
-    })`).join('\n') }
-    .otherwise({
-      template: 'Where\\'d you come from?'
-    });
-
-  function reduce(list, fn, initial = {}) {
-    let state = initial;
-    for (let key in list) state = fn(state, list[key], key);
-    return state;
-  }
-}];`);
-
-const createConfigs = exports.createConfigs = config => `export default [() => {
-
-}];`;
-
-const createApp = exports.createApp = ({ rootModule }) => autoGenerateWarning(`
-import ${ rootModule } from './modules/${ rootModule }';
-
-export default {
-  '${ rootModule }': ${ rootModule }['${ rootModule }']
+var createRoutes = exports.createRoutes = function createRoutes(routes) {
+  return autoGenerateWarning(
+  // autogenerateWarning`
+  // export default ...
+  // `
+  'export default [\'$routeProvider\', $routeProvider => {\n  const routerController = [\n    \'$scope\', \'$routeParams\',\n    ($scope, $routeParams) => Object.assign($scope, $routeParams)\n  ];\n\n  // Allows you to wire a route to a specific item in a database.\n  // Currently, this is equivalent to grabbing a value from a\n  // key-value store based on a user provided parameter in the URL\n  const dataController = [\n    \'$scope\', \'$routeParams\', \'dataStore\',\n    ($scope, $routeParams, dataStore) => {\n      const something = reduce($routeParams, (params, value, name) => {\n        const [store, index] = name.match(/(\\b|[A-Z]+)[a-z]*/g);\n\n        console.log({name, value, store, index});\n\n        params[store] = dataStore[' + '`get${capitalize(store)}By${index}`' + '](value);\n\n        return params;\n      });\n\n      console.log({$scope, dataStore, something});\n\n      Object.assign($scope, something);\n\n      function capitalize(string) {\n        return string.charAt(0).toUpperCase() + string.slice(1);\n      }\n    }\n  ];\n\n  $routeProvider\n' + routes.map(function (route) {
+    return '      .when(\'' + route.path + '\', {\n      template: \'<' + route.name + '></' + route.name + '>\'' + (route.path.indexOf(':') >= 0 ? ',\n      controller: dataController' : '') + '\n    })';
+  }).join('\n') + '\n    .otherwise({\n      template: \'Where\\\'d you come from?\'\n    });\n\n  function reduce(list, fn, initial = {}) {\n    let state = initial;\n    for (let key in list) state = fn(state, list[key], key);\n    return state;\n  }\n}];');
 };
-`);
+
+var createConfigs = exports.createConfigs = function createConfigs(config) {
+  return 'export default [() => {\n\n}];';
+};
+
+var createApp = exports.createApp = function createApp(_ref7) {
+  var rootModule = _ref7.rootModule;
+  return autoGenerateWarning('\nimport ' + rootModule + ' from \'./modules/' + rootModule + '\';\n\nexport default {\n  \'' + rootModule + '\': ' + rootModule + '[\'' + rootModule + '\']\n};\n');
+};
 
 function autoGenerateWarning(string) {
-  return `/* !!!!!!! This file is autogenerated. DO NOT MODIFY !!!!!!! */
-${ string }
-/* !!!!!!! This file is autogenerated. DO NOT MODIFY !!!!!!! */`;
+  return '/* !!!!!!! This file is autogenerated. DO NOT MODIFY !!!!!!! */\n' + string + '\n/* !!!!!!! This file is autogenerated. DO NOT MODIFY !!!!!!! */';
 }
 
-const SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
-const MOZ_HACK_REGEXP = /^moz([A-Z])/;
+var SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
+var MOZ_HACK_REGEXP = /^moz([A-Z])/;
 
 function camelCase(name) {
   return name.replace(SPECIAL_CHARS_REGEXP, function (_, separator, letter, offset) {
     return offset ? letter.toUpperCase() : letter;
   }).replace(MOZ_HACK_REGEXP, 'Moz$1');
 }
-//# sourceMappingURL=component.js.map

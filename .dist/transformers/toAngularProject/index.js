@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.toAngularProject = toAngularProject;
+exports.default = toAngularProject;
 
 var _fs = require('fs');
 
@@ -21,10 +21,14 @@ var _component = require('./component');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function toAngularProject(project, directory = '.') {
-  const projectRoot = `${ process.env.project_root || directory }/${ project.name }`,
-        sourceRoot = _path2.default.join(projectRoot, 'src'),
-        modulesRoot = _path2.default.join(sourceRoot, 'modules');
+function toAngularProject(project) {
+  var directory = arguments.length <= 1 || arguments[1] === undefined ? '.' : arguments[1];
+
+  var projectRoot = (process.env.project_root || directory) + '/' + project.name,
+      sourceRoot = _path2.default.join(projectRoot, 'src'),
+      modulesRoot = _path2.default.join(sourceRoot, 'modules');
+
+  console.log({ env: process.env, directory: directory, projectRoot: projectRoot });
 
   project.rootModule = getFirstModuleWithComponents(project);
 
@@ -34,25 +38,27 @@ function toAngularProject(project, directory = '.') {
 
   _lodash2.default.each({
     'app.js': (0, _component.createApp)(project),
-    'app.less': `body { .unmodified-component { text-align: center; } .children { display: flex; justify-content: center; align-items: center; * { flex: 1; } } }\n`,
+    'app.less': 'body { .unmodified-component { text-align: center; } .children { display: flex; justify-content: center; align-items: center; * { flex: 1; } } }\n',
     'index.html': (0, _component.index)(project)
-  }, (content, name) => createFile(_path2.default.join(sourceRoot, name), content));
+  }, function (content, name) {
+    return createFile(_path2.default.join(sourceRoot, name), content);
+  });
 
   return project;
 
   function getFirstModuleWithComponents(project) {
     // note: these are not necessarily in the order of the source file...
-    for (let i = 0; i < project.modules.length; i++) {
-      const module = project.modules[i];
+    for (var i = 0; i < project.modules.length; i++) {
+      var module = project.modules[i];
 
       if (module.components && module.components.length > 0) return module.name;
     }
   }
 
   function processModule(module) {
-    const moduleRoot = _path2.default.join(modulesRoot, module.name),
-          directivesRoot = _path2.default.join(moduleRoot, 'directives'),
-          factoriesRoot = _path2.default.join(moduleRoot, 'factories');
+    var moduleRoot = _path2.default.join(modulesRoot, module.name),
+        directivesRoot = _path2.default.join(moduleRoot, 'directives'),
+        factoriesRoot = _path2.default.join(moduleRoot, 'factories');
 
     createDirectory(moduleRoot);
 
@@ -76,14 +82,16 @@ function toAngularProject(project, directory = '.') {
 
       components.forEach(componentProcessor(directivesRoot));
 
-      function componentProcessor(root, parent = { path: `./directives` }) {
-        return component => {
-          component.path = `${ parent.path }/${ component.name }`; // mutation
+      function componentProcessor(root) {
+        var parent = arguments.length <= 1 || arguments[1] === undefined ? { path: './directives' } : arguments[1];
+
+        return function (component) {
+          component.path = parent.path + '/' + component.name; // mutation
           component.components.forEach(componentProcessor(prepareDirectory(component), component));
         };
 
         function prepareDirectory(component) {
-          const componentRoot = _path2.default.join(root, component.name);
+          var componentRoot = _path2.default.join(root, component.name);
 
           createDirectory(componentRoot);
           createFiles(componentRoot, component);
@@ -92,7 +100,7 @@ function toAngularProject(project, directory = '.') {
         }
 
         function createFiles(directory, component) {
-          const root = _path2.default.join(directory, component.name);
+          var root = _path2.default.join(directory, component.name);
 
           createFileIfNotExists(_path2.default.join(directory, 'template.html'), (0, _component.template)(component));
           createFileIfNotExists(_path2.default.join(directory, 'style.less'), (0, _component.style)(component));
@@ -106,14 +114,16 @@ function toAngularProject(project, directory = '.') {
 
       factories.forEach(factoryProcessor(factoriesRoot));
 
-      function factoryProcessor(root, parent = { path: `./factories` }) {
-        return factory => {
-          factory.path = `${ parent.path }/${ factory.name }`; // mutation
+      function factoryProcessor(root) {
+        var parent = arguments.length <= 1 || arguments[1] === undefined ? { path: './factories' } : arguments[1];
+
+        return function (factory) {
+          factory.path = parent.path + '/' + factory.name; // mutation
           return factory.factories.map(factoryProcessor(prepareDirectory(factory), factory));
         };
 
         function prepareDirectory(factory) {
-          const factoryRoot = _path2.default.join(root, factory.name);
+          var factoryRoot = _path2.default.join(root, factory.name);
 
           createDirectory(factoryRoot);
           createFiles(factoryRoot, factory);
@@ -122,7 +132,7 @@ function toAngularProject(project, directory = '.') {
         }
 
         function createFiles(directory, f) {
-          const root = _path2.default.join(directory, f.name);
+          var root = _path2.default.join(directory, f.name);
 
           createFileIfNotExists(_path2.default.join(directory, 'index.js'), (0, _component.factory)(f));
         }
@@ -130,7 +140,9 @@ function toAngularProject(project, directory = '.') {
     }
 
     function processConfigs(configs) {
-      configs.forEach(config => createFileIfNotExists(_path2.default.join(moduleRoot, `${ config }.js`), (0, _component.createConfigs)(config)));
+      configs.forEach(function (config) {
+        return createFileIfNotExists(_path2.default.join(moduleRoot, config + '.js'), (0, _component.createConfigs)(config));
+      });
     }
 
     function createModuleIndex(module) {
@@ -143,7 +155,7 @@ function addDependenciesToPackageDotJSON(dependencies) {}
 
 function createDirectory(directory) {
   if (!_fs2.default.existsSync(directory)) {
-    console.log(`Creating D '${ directory }'`);
+    console.log('Creating D \'' + directory + '\'');
     _fs2.default.mkdirSync(directory);
   }
 }
@@ -153,7 +165,6 @@ function createFileIfNotExists(path, content) {
 }
 
 function createFile(path, content) {
-  console.log(`Creating F '${ path }'`);
+  console.log('Creating F \'' + path + '\'');
   _fs2.default.writeFileSync(path, content);
 }
-//# sourceMappingURL=index.js.map

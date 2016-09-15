@@ -7,55 +7,79 @@ Object.defineProperty(exports, "__esModule", {
 var _util = require('./util');
 
 exports.default = {
-  ListOf_some(element, separator, rest) {
+  ListOf_some: function ListOf_some(element, separator, rest) {
     return [element.toObject()].concat(rest.toObject());
   },
-
-  CContained(open, element, close) {
+  CContained: function CContained(open, element, close) {
     return element.toObject();
   },
-
-  Application(name, modules) {
-    return (0, _util.join)({ name, modules });
+  Application: function Application(name, modules) {
+    return (0, _util.join)({ name: name, modules: modules });
   },
 
-  Module: (name, elements) => (0, _util.join)(Object.assign({ name }, reduce(elements.toObject(), (obj, element) => Object.assign(obj, element)))),
 
-  Requirements: (glyph, requirements) => (0, _util.join)({ requirements }),
+  Module: function Module(name, elements) {
+    return (0, _util.join)(Object.assign({ name: name }, reduce(elements.toObject(), function (obj, element) {
+      return Object.assign(obj, element);
+    })));
+  },
 
-  Requirement: (moduleName, jsPackageName) => (0, _util.join)({ moduleName, jsPackageName: (0, _util.first)(jsPackageName) }),
-  JSPackage: (colon, jsPackageName) => jsPackageName.toObject(),
+  Requirements: function Requirements(glyph, requirements) {
+    return (0, _util.join)({ requirements: requirements });
+  },
 
-  Components: (glyph, components) => (0, _util.join)({ components }),
+  Requirement: function Requirement(moduleName, jsPackageName) {
+    return (0, _util.join)({ moduleName: moduleName, jsPackageName: (0, _util.first)(jsPackageName) });
+  },
+  JSPackage: function JSPackage(colon, jsPackageName) {
+    return jsPackageName.toObject();
+  },
 
-  Component: (name, components) => (0, _util.join)({ name, components: (0, _util.first)(components) || [] }),
+  Components: function Components(glyph, components) {
+    return (0, _util.join)({ components: components });
+  },
 
-  Routes: (glyph, routes) => (0, _util.join)({ routes }),
+  Component: function Component(name, components) {
+    return (0, _util.join)({ name: name, components: (0, _util.first)(components) || [] });
+  },
 
-  Route: (path, colon, name) => (0, _util.join)({ path, name }),
+  Routes: function Routes(glyph, routes) {
+    return (0, _util.join)({ routes: routes });
+  },
 
-  Factories: (glyph, factories) => (0, _util.join)({ factories }),
+  Route: function Route(path, colon, name) {
+    return (0, _util.join)({ path: path, name: name });
+  },
 
-  Factory: (name, factories) => (0, _util.join)({ name, factories: (0, _util.first)(factories) || [] }),
+  Factories: function Factories(glyph, factories) {
+    return (0, _util.join)({ factories: factories });
+  },
 
-  Configs: (glyph, configs) => {
-    const obj = (0, _util.join)({ configs });
+  Factory: function Factory(name, factories) {
+    return (0, _util.join)({ name: name, factories: (0, _util.first)(factories) || [] });
+  },
+
+  Configs: function Configs(glyph, configs) {
+    var obj = (0, _util.join)({ configs: configs });
     if (obj.configs.length === 0) obj.configs.push('config');
     return obj;
   },
 
-  name(character) {
+  name: function name(character) {
     return this.interval.contents;
   },
-
-  path(character) {
+  path: function path(character) {
     return this.interval.contents;
   }
 };
 
-function reduce(xs, fn, initial = {}) {
-  let next = initial;
-  xs.forEach(x => next = fn(next, x));
+
+function reduce(xs, fn) {
+  var initial = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+
+  var next = initial;
+  xs.forEach(function (x) {
+    return next = fn(next, x);
+  });
   return next;
 }
-//# sourceMappingURL=AngularProject.toObject.semantics.js.map
