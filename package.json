@@ -1,19 +1,13 @@
 {
   "name": "angularproject",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Angular.js 1 project generator",
-  "main": ".dist/index.js",
-  "bin": {
-    "AngularProject": ".dist/cli.js"
-  },
-  "directories": {
-    "doc": "docs"
-  },
+  "main": ".dist/api.js",
+  "bin": ".dist/cli.js",
   "dependencies": {
     "lodash": "^4.11.1",
     "ohm-js": "^0.9.0"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -26,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/blakelapierre/AngularProject/issues"
   },
-  "homepage": "https://github.com/blakelapierre/AngularProject#readme"
+  "homepage": "https://github.com/blakelapierre/AngularProject#readme",
+  "jshintConfig": {
+    "esnext": true
+  }
 }
