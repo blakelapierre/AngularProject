@@ -1,73 +1,150 @@
-#base-node
+Reference
+=========
 
-A simple and highly configurable base project for ECMAScript 2015 projects.
-
-Out-of-the-box support for:
-  1. Packaging your application (including dependencies) into a single, compacted script file.
-  2. Generating a minimal Docker container (<10MB download, <26MB expanded) so that your app can be deployed everywhere.
-
-
-###Installation
-
+Application
+------------
 ````
-$ curl https://raw.githubusercontent.com/blakelapierre/base-node/master/create.sh | bash -s your-project-name
+application-name {
+  /* modules */
+}
 ````
 
-The above command will create a new git repository named `your-project-name` in your current directory.
+Module
+------
+````
+module-name {
+  /* elements */
+}
+````
+Element
+-------
 
-#####OR
-
+Components/Directives
+_____________________
 
 ````
-$ git clone https://github.com/blakelapierre/base-node
-$ cd base-node
-$ npm install -g gulp-cli
-$ npm install
+components {                  directives {                  # {
+  component-name-1              directive-name-1              name-1
+  component-name-2    *or.      directive-name-2    *or.      name-2
+  /* ... */                     /* ... */                     /* ... */
+}                             }                             }
+````
+
+Components/Directives may also be nested inside others:
+````
+# {
+  video-player {
+    screen {
+      stats
+      content
+    }
+    controls
+  }
+}
+````
+Note: All component/directive names within a *module* must be unique. The nesting does not create a new namespace.
+
+
+
+Factories/Services
+__________________
+````
+factories {                 ^ {
+  factory-name-1              factory-name-1
+  factory-name-2    *or.      factory-name-2
+  /* ... */                   /* ... */
+}                           }
 ````
 
 
-###Building
-
+Routes
+______
 ````
-$ gulp build
-````
-
-###Running
-
-````
-$ node .dist/index.js
-````
-
-Tests:
-````
-$ node .dist/tests/index.js
-````
-
-###Developing
-This command will watch your source files for changes and run them through `jshint` and the transpiler when they change.
-
-````
-$ gulp watch
-````
-
------------
-This command will do what `watch` does, but will also run your program after transpiling and will restart it after each transpile.
-
-````
-$ gulp dev
+routes {                     => {                         > {
+  '/': welcome                 '/': welcome                 '/': welcome
+  '/user/:name': user   *or.   '/user/:name': user   *or.   '/user/:name': user
+  '<path>': <# name>           '<path>': <# name>           '<path>': <# name>
+  /* ... */                    /* ... */                    /* ... */
+}                            }                            }
 ````
 
 
-###Containerizing
-
-
+Example
+-------
 ````
-$ gulp package
-$ cd container
-$ ./build.sh
-$ ./publish.sh
+2016-fantasy {
+  data-store {
+    ^ {
+      data-store
+    }
+  }
+
+  devbox {}
+
+  presidential {
+    < {
+      ngRoute   :angular-route
+      ngAnimate :angular-animate
+      ngTouch   :angular-touch
+
+      data-store
+      devbox
+      state
+      state-graph
+      ui-components
+    }
+
+    # {
+      presidential {
+        welcome
+        candidates
+        league
+        find-league
+        new-league {
+          construct
+          draft
+          selection {
+            pasture
+            stable
+            set-draft
+          }
+          sidebar {
+            players {
+              invite
+            }
+          }
+        }
+      }
+    }
+
+    > {
+      '/' : welcome
+      '/candidates': candidates
+      '/league/new': new-league
+      '/league/find': find-league
+      '/league/:leagueId': league
+    }
+
+    config
+  }
+
+  state {
+    ^ {state {nested}}
+  }
+
+  state-graph {
+    # {stage}
+  }
+
+  ui-components {
+    directives {
+      delayed-src
+      scroll
+      scrollControl
+      scrollSync
+      scrollSwap
+      sensitiveTouch
+    }
+  }
+}
 ````
-
-First, run the `package` task to produce a single-file, minimized version of your app.
-
-Then, go into the `container` folder to access the scripts to package your app into a Docker container. You should edit the `build.sh` and `publish.sh` scripts to use a container name that fits your project name.
