@@ -25,7 +25,7 @@ export function factory(project) {
 export const index =
   component =>
 `<!DOCTYPE html>
-<html ng-app="presidential">
+<html ng-app="${component.rootModule}">
   <head>
     <meta charset="utf-8">
 
