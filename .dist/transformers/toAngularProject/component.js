@@ -27,7 +27,7 @@ function factory(project) {
 }
 
 var index = exports.index = function index(component) {
-  return '<!DOCTYPE html>\n<html ng-app="presidential">\n  <head>\n    <meta charset="utf-8">\n\n    <title>' + component.name + '</title>\n\n    <!-- Do we want this? -->\n    <meta name="viewport" content="width=device-width, initial-scale=1">\n    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->\n\n    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">\n\n    <link rel="stylesheet" href="app.css">\n  </head>\n  <body>\n    <ng-view></ng-view>\n    <script src="vendor.js"></script>\n    <script src="app.js"></script>\n  </body>\n</html>\n';
+  return '<!DOCTYPE html>\n<html ng-app="' + component.rootModule + '">\n  <head>\n    <meta charset="utf-8">\n\n    <title>' + component.name + '</title>\n\n    <!-- Do we want this? -->\n    <meta name="viewport" content="width=device-width, initial-scale=1">\n    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->\n\n    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">\n\n    <link rel="stylesheet" href="app.css">\n  </head>\n  <body>\n    <ng-view></ng-view>\n    <script src="vendor.js"></script>\n    <script src="app.js"></script>\n  </body>\n</html>\n';
 };
 
 var moduleIndex = exports.moduleIndex = function () {
