@@ -36,18 +36,18 @@ var moduleIndex = exports.moduleIndex = function () {
   };
   var printComponents = function printComponents(indent, components) {
     return '' + (components || []).map(function (_ref2) {
-      var name = _ref2.name;
-      var path = _ref2.path;
-      var components = _ref2.components;
+      var name = _ref2.name,
+          path = _ref2.path,
+          components = _ref2.components;
       return indent + '.directive(\'' + camelCase(name) + '\',' + Array(Math.max(1, 33 - name.length - indent.length)).join(' ') + 'require(\'' + path + '\'))' + onNewLineIfExists(printComponents(indent + '  ', components));
     }).join('\n');
   };
 
   var printFactories = function printFactories(indent, factories) {
     return '' + (factories || []).map(function (_ref3) {
-      var name = _ref3.name;
-      var path = _ref3.path;
-      var factories = _ref3.factories;
+      var name = _ref3.name,
+          path = _ref3.path,
+          factories = _ref3.factories;
       return indent + '.factory(\'' + camelCase(name) + '\',' + Array(Math.max(1, 33 - name.length - indent.length)).join(' ') + 'require(\'' + path + '\'))' + onNewLineIfExists(printFactories(indent + '  ', factories));
     }).join('\n');
   };
@@ -59,15 +59,15 @@ var moduleIndex = exports.moduleIndex = function () {
   };
 
   return function (_ref4) {
-    var name = _ref4.name;
-    var requirements = _ref4.requirements;
-    var components = _ref4.components;
-    var factories = _ref4.factories;
-    var routes = _ref4.routes;
-    var configs = _ref4.configs;
+    var name = _ref4.name,
+        requirements = _ref4.requirements,
+        components = _ref4.components,
+        factories = _ref4.factories,
+        routes = _ref4.routes,
+        configs = _ref4.configs;
     return autoGenerateWarning('require(\'angular\');\n\n' + (requirements || []).map(function (_ref5) {
-      var jsPackageName = _ref5.jsPackageName;
-      var moduleName = _ref5.moduleName;
+      var jsPackageName = _ref5.jsPackageName,
+          moduleName = _ref5.moduleName;
       return 'require(\'' + (jsPackageName || '../' + moduleName) + '\');';
     }).join('\n') + '\n\nexport default {\n  \'' + name + '\': angular.module(\'' + name + '\', [' + (requirements || []).map(function (_ref6) {
       var moduleName = _ref6.moduleName;

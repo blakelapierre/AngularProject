@@ -75,7 +75,7 @@ exports.default = {
 
 
 function reduce(xs, fn) {
-  var initial = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+  var initial = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
   var next = initial;
   xs.forEach(function (x) {

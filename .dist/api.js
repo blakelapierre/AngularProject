@@ -27,11 +27,9 @@ var _GrammarError2 = _interopRequireDefault(_GrammarError);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _loadGrammarWithSeman = loadGrammarWithSemantics();
-
-var grammar = _loadGrammarWithSeman.grammar;
-var semantics = _loadGrammarWithSeman.semantics;
-
+var _loadGrammarWithSeman = loadGrammarWithSemantics(),
+    grammar = _loadGrammarWithSeman.grammar,
+    semantics = _loadGrammarWithSeman.semantics;
 
 var api = function api(text, directory) {
   return new Promise(function (resolve, reject) {

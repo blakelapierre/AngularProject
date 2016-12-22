@@ -22,9 +22,9 @@ var _component = require('./component');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function toAngularProject(project) {
-  var directory = arguments.length <= 1 || arguments[1] === undefined ? '.' : arguments[1];
+  var directory = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : project.name;
 
-  var projectRoot = (process.env.project_root || directory) + '/' + project.name,
+  var projectRoot = '' + (process.env.project_root || directory),
       sourceRoot = _path2.default.join(projectRoot, 'src'),
       modulesRoot = _path2.default.join(sourceRoot, 'modules');
 
@@ -83,7 +83,7 @@ function toAngularProject(project) {
       components.forEach(componentProcessor(directivesRoot));
 
       function componentProcessor(root) {
-        var parent = arguments.length <= 1 || arguments[1] === undefined ? { path: './directives' } : arguments[1];
+        var parent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : { path: './directives' };
 
         return function (component) {
           component.path = parent.path + '/' + component.name; // mutation
@@ -115,7 +115,7 @@ function toAngularProject(project) {
       factories.forEach(factoryProcessor(factoriesRoot));
 
       function factoryProcessor(root) {
-        var parent = arguments.length <= 1 || arguments[1] === undefined ? { path: './factories' } : arguments[1];
+        var parent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : { path: './factories' };
 
         return function (factory) {
           factory.path = parent.path + '/' + factory.name; // mutation
