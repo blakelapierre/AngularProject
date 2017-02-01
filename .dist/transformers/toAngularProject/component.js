@@ -28,7 +28,7 @@ function factory(project) {
 }
 
 function filter(project) {
-  return 'module.exports = () => ({\n  return input => {\n    return \'New Filter!\' + input;\n  }\n});';
+  return 'module.exports = () => input => \'New Filter!\' + input;';
 }
 
 var index = exports.index = function index(component) {
