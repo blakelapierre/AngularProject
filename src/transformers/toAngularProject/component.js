@@ -23,11 +23,7 @@ export function factory(project) {
 }
 
 export function filter(project) {
-  return `module.exports = () => ({
-  return input => {
-    return 'New Filter!' + input;
-  }
-});`;
+  return `module.exports = () => input => 'New Filter!' + input;`;
 }
 
 export const index =
