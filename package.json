@@ -1,6 +1,6 @@
 {
   "name": "angular_project",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Angular.js 1 project generator",
   "main": ".dist/api.js",
   "bin": ".dist/cli.js",
