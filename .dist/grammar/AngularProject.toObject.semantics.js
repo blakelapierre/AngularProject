@@ -59,6 +59,14 @@ exports.default = {
     return (0, _util.join)({ name: name, factories: (0, _util.first)(factories) || [] });
   },
 
+  Filters: function Filters(glyph, filters) {
+    return (0, _util.join)({ filters: filters });
+  },
+
+  Filter: function Filter(name, filters) {
+    return (0, _util.join)({ name: name, filters: (0, _util.first)(filters) || [] });
+  },
+
   Configs: function Configs(glyph, configs) {
     var obj = (0, _util.join)({ configs: configs });
     if (obj.configs.length === 0) obj.configs.push('config');

@@ -58,7 +58,8 @@ function toAngularProject(project) {
   function processModule(module) {
     var moduleRoot = _path2.default.join(modulesRoot, module.name),
         directivesRoot = _path2.default.join(moduleRoot, 'directives'),
-        factoriesRoot = _path2.default.join(moduleRoot, 'factories');
+        factoriesRoot = _path2.default.join(moduleRoot, 'factories'),
+        filtersRoot = _path2.default.join(moduleRoot, 'filters');
 
     createDirectory(moduleRoot);
 
@@ -69,6 +70,7 @@ function toAngularProject(project) {
 
     if (module.components) processComponents(module.components);
     if (module.factories) processFactories(module.factories);
+    if (module.filters) processFilters(module.filters);
     if (module.configs) processConfigs(module.configs);
 
     createModuleIndex(module);
@@ -135,6 +137,36 @@ function toAngularProject(project) {
           var root = _path2.default.join(directory, f.name);
 
           createFileIfNotExists(_path2.default.join(directory, 'index.js'), (0, _component.factory)(f));
+        }
+      }
+    }
+
+    function processFilters(filters) {
+      createDirectory(filtersRoot);
+
+      filters.forEach(filterProcessor(filtersRoot));
+
+      function filterProcessor(root) {
+        var parent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : { path: './filters' };
+
+        return function (filter) {
+          filter.path = parent.path + '/' + filter.name; // mutation
+          return filter.filters.map(filterProcessor(prepareDirectory(filter), filter));
+        };
+
+        function prepareDirectory(filter) {
+          var filterRoot = _path2.default.join(root, filter.name);
+
+          createDirectory(filterRoot);
+          createFiles(filterRoot, filter);
+
+          return filterRoot;
+        }
+
+        function createFiles(directory, f) {
+          var root = _path2.default.join(directory, f.name);
+
+          createFileIfNotExists(_path2.default.join(directory, 'index.js'), (0, _component.filter)(f));
         }
       }
     }
