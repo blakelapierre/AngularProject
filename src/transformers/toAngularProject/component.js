@@ -22,6 +22,14 @@ export function factory(project) {
 });`;
 }
 
+export function filter(project) {
+  return `module.exports = () => ({
+  return input => {
+    return 'New Filter!' + input;
+  }
+});`;
+}
+
 export const index =
   component =>
 `<!DOCTYPE html>
@@ -67,12 +75,21 @@ export const moduleIndex = (function() {
       ).join('\n')
 }`;
 
+  const printFilters = (indent, filters) =>
+
+`${(filters || [])
+      .map(
+        ({name, path, filters}) =>
+            `${indent}.filter('${camelCase(name)}',${Array(Math.max(1, 33 - name.length - indent.length)).join(' ')}require('${path}'))${onNewLineIfExists(printFilters(indent + '  ', filters))}`
+      ).join('\n')
+}`;
+
   const printConfigs = (indent, configs) =>
 `${
   (configs || []).map(config => `${indent}.config(require('./${config}').default)`).join('\n')
 }`;
 
-  return ({name, requirements, components, factories, routes, configs}) => autoGenerateWarning(
+  return ({name, requirements, components, factories, filters, routes, configs}) => autoGenerateWarning(
 `require('angular');
 
 ${(requirements || []).map(({jsPackageName, moduleName}) => `require('${jsPackageName || ('../' + moduleName)}');`).join('\n')}
@@ -81,6 +98,7 @@ export default {
   '${name}': angular.module('${name}', [${(requirements || []).map(({moduleName}) => `'${moduleName}'`).join(', ')}])
 ${printComponents('    ', components)}
 ${printFactories('    ', factories)}
+${printFilters('    ', filters)}
 ${printConfigs('    ', configs)}
 };`);
 

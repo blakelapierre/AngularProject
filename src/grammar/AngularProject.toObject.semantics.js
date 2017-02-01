@@ -33,6 +33,10 @@ export default {
 
   Factory: (name, factories) => join({name, factories: first(factories) || []}),
 
+  Filters: (glyph, filters) => join({filters}),
+
+  Filter: (name, filters) => join({name, filters: first(filters) || []}),
+
   Configs: (glyph, configs) => {
     const obj = join({configs});
     if (obj.configs.length === 0) obj.configs.push('config');

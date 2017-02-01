@@ -3,7 +3,7 @@ import path from 'path';
 
 import _ from 'lodash';
 
-import {createRoutes, createConfigs, createApp, directive, factory, index, moduleIndex, style, template} from './component';
+import {createRoutes, createConfigs, createApp, directive, factory, filter, index, moduleIndex, style, template} from './component';
 
 export default function toAngularProject(project, directory = project.name) {
   const projectRoot = `${process.env.project_root || directory}`,
@@ -38,7 +38,8 @@ export default function toAngularProject(project, directory = project.name) {
   function processModule(module) {
     const moduleRoot = path.join(modulesRoot, module.name),
           directivesRoot = path.join(moduleRoot, 'directives'),
-          factoriesRoot = path.join(moduleRoot, 'factories');
+          factoriesRoot = path.join(moduleRoot, 'factories'),
+          filtersRoot = path.join(moduleRoot, 'filters');
 
     createDirectory(moduleRoot);
 
@@ -49,6 +50,7 @@ export default function toAngularProject(project, directory = project.name) {
 
     if (module.components) processComponents(module.components);
     if (module.factories) processFactories(module.factories);
+    if (module.filters) processFilters(module.filters);
     if (module.configs) processConfigs(module.configs);
 
     createModuleIndex(module);
@@ -111,6 +113,34 @@ export default function toAngularProject(project, directory = project.name) {
           const root = path.join(directory, f.name);
 
           createFileIfNotExists(path.join(directory, 'index.js'), factory(f));
+        }
+      }
+    }
+
+    function processFilters(filters) {
+      createDirectory(filtersRoot);
+
+      filters.forEach(filterProcessor(filtersRoot));
+
+      function filterProcessor(root, parent = {path: `./filters`}) {
+        return filter => {
+          filter.path = `${parent.path}/${filter.name}`; // mutation
+          return filter.filters.map(filterProcessor(prepareDirectory(filter), filter));
+        };
+
+        function prepareDirectory(filter) {
+          const filterRoot = path.join(root, filter.name);
+
+          createDirectory(filterRoot);
+          createFiles(filterRoot, filter);
+
+          return filterRoot;
+        }
+
+        function createFiles(directory, f) {
+          const root = path.join(directory, f.name);
+
+          createFileIfNotExists(path.join(directory, 'index.js'), filter(f));
         }
       }
     }

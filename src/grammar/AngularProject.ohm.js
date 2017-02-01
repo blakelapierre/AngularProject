@@ -7,12 +7,14 @@ export default
   ModuleElement = Requirements
                 | Components
                 | Factories
+                | Filters
                 | Routes
                 | Configs
 
   Requirements = RequirementsGlyph Contained<Requirement*>
   Components = ComponentsGlyph Contained<Component*>
   Factories = FactoriesGlyph Contained<Factory*>
+  Filters = FiltersGlyph Contained<Filter*>
   Routes = RoutesGlyph Contained<Route*>
 
   Configs = "config" Contained<Config*>?
@@ -28,6 +30,9 @@ export default
   FactoriesGlyph = "factories"
                  | "^"
 
+  FiltersGlyph = "filters"
+               | "|"
+
   RoutesGlyph = "routes"
               | "=>"
               | ">"
@@ -35,6 +40,7 @@ export default
   Requirement = name JSPackage?
   Component = name Contained<Component*>?
   Factory = name Contained<Factory*>?
+  Filter = name Contained<Filter*>?
   Route = Quoted<path> ":" name
 
   JSPackage = ":" jsPackageName

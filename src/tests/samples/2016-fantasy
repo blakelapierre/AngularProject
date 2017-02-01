@@ -37,6 +37,11 @@
       }
     }
 
+    | {
+      filter1
+      filter2
+    }
+
     > {
       '/' : welcome
       '/candidates': candidates
@@ -78,6 +83,10 @@
       scrollSync
       scrollSwap
       sensitiveTouch
+    }
+
+    filters {
+      coolDisplayFilter
     }
   }
 }
